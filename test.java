@@ -13,13 +13,20 @@ public class test{
         String table = "Speise";
 
         SpeiseDAOsqlite dao = new SpeiseDAOsqlite(filename);
-        Speise s = new Speise(20,"hey you", "copy",23.45,3);
+        Speise s = new Speise(20,"hey you","copy",23.45,3);
+        //dao.delete(20,table,"Nr");
         System.out.println(s.getNr());
         dao.insert("Speise",s);
         Speise sp = new Speise();
         sp=dao.select(20,table,"Nr",sp);
-        System.out.print(sp.getBeschreibung());
+        System.out.println("after select");
+        System.out.println(sp.getBeschreibung());
+        sp.setBeschreibung("tomato");
+        dao.update(sp,table);
+        sp=dao.select(20,table,"Nr",sp);
+        System.out.println(sp.getBeschreibung());
         dao.delete(20,table,"Nr");
+
 
     }
 }

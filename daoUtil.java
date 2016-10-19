@@ -15,6 +15,7 @@ public abstract class daoUtil {
     private Connection conn = null;
     private PreparedStatement ps = null;
     private ResultSet resultset = null;
+    private ResultSetMetaData rsmd =null;
 
     public daoUtil(String filename){
         try {
@@ -65,20 +66,17 @@ public abstract class daoUtil {
             ps.setInt(1, id);
             resultset = ps.executeQuery();
             System.out.println(resultset.isBeforeFirst());
-            System.out.print(resultset.getString(1));
 
-            ResultSetMetaData rsmd = resultset.getMetaData();
+            rsmd = resultset.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
-            System.out.println(columnsNumber);
-
-            for (int i =1; i <= columnsNumber; i++) {
+            for (int i =0; i <columnsNumber; i++) {
                 try {
-                    if (rsmd.getColumnType(i) == Types.INTEGER) {
-                        list.add(i-1, resultset.getInt(i));
-                    }else if (rsmd.getColumnType(i) == Types.VARCHAR) {
-                        list.add(i-1, resultset.getString(i ));
-                    }else if (rsmd.getColumnType(i) == Types.NUMERIC) {
-                        list.add(i-1, resultset.getDouble(i ));
+                    if (rsmd.getColumnType(i+1) == Types.INTEGER) {
+                        list.add(i, resultset.getInt(i+1));
+                    }else if (rsmd.getColumnType(i+1) == Types.VARCHAR) {
+                        list.add(i, resultset.getString(i+1));
+                    }else if (rsmd.getColumnType(i+1) == Types.NUMERIC) {
+                        list.add(i, resultset.getDouble(i+1));
                     }else {
                         System.out.println("Add new type corresponding to the sql type");
                     }
@@ -104,6 +102,59 @@ public abstract class daoUtil {
             ex.printStackTrace();
         }
     }
+
+    public <T extends classUtil> void update(T t,String table){
+        List<String> columns = new ArrayList<String>();
+        int length=0;
+        try {
+
+            String sql= "SELECT * FROM "+table;
+            ps = conn.prepareStatement(sql);
+            resultset = ps.executeQuery();
+            rsmd = resultset.getMetaData();
+            length = rsmd.getColumnCount();
+            resultset.next();
+            for (int i = 0; i<length;i++){
+                columns.add(i,rsmd.getColumnName(i+1));
+            }
+            sql="update "+table+" Set";
+            for (int i = 1; i<columns.size();i++){
+                if (i==columns.size()-1){
+                    sql=sql+" "+columns.get(i)+" = ?";
+                }else {
+                    sql = sql + " " + columns.get(i) + " = ?,";
+                }
+
+            }
+            sql=sql+" where "+columns.get(0)+" = ?";
+            System.out.println(sql);
+            List<Object> list = t.toList();
+            try {
+                this.ps = this.conn.prepareStatement(sql);
+                for (int i = 1; i <=list.size(); i++) {
+                    if (i==list.size()){
+                        this.ps.setInt(i, (Integer) list.get(0));
+                    }else if (list.get(i) instanceof Integer) {
+                        this.ps.setInt(i, (Integer) list.get(i));
+                    }else if (list.get(i) instanceof Double) {
+                        this.ps.setDouble(i, (Double) list.get(i));
+                    }else if (list.get(i) instanceof String) {
+                        this.ps.setString(i, (String) list.get(i));
+                    }else{
+                        System.out.println("put your own type in here with insanceof" + i);
+                    }
+                }
+                ps.executeUpdate();
+
+            } catch(Exception var4){
+                var4.printStackTrace();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
     public List<List<Object>> getTableData(String table) {
         String sql = "SELECT * FROM " + table;
         List<List<Object>> data = new ArrayList<List<Object>>();
@@ -111,7 +162,7 @@ public abstract class daoUtil {
             ps = conn.prepareStatement(sql);
             resultset = ps.executeQuery(sql);
 
-            ResultSetMetaData rsmd = resultset.getMetaData();
+            rsmd = resultset.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
             System.out.println(columnsNumber);
 
