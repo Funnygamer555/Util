@@ -15,10 +15,11 @@ public class test{
         SpeiseDAOsqlite dao = new SpeiseDAOsqlite(filename);
         Speise s = new Speise(20,"hey you", "copy",23.45,3);
         System.out.println(s.getNr());
-        //dao.insert(s.toList(), "Speise");
+        dao.insert("Speise",s);
         Speise sp = new Speise();
-        sp.toClass(dao.select(1,table,"Nr"));
+        sp=dao.select(20,table,"Nr",sp);
         System.out.print(sp.getBeschreibung());
+        dao.delete(20,table,"Nr");
 
     }
 }

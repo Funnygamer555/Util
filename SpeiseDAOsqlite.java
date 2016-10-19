@@ -34,7 +34,7 @@ public class SpeiseDAOsqlite extends daoUtil{
 		
 	}
 	*/
-	public void delete(int id){
+	/*public void delete(int id){
 		try{
 			String sql="delete from Speise where Nr = ?";
 			ps=(conn).prepareStatement(sql);
@@ -43,8 +43,8 @@ public class SpeiseDAOsqlite extends daoUtil{
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-	}
-	public void update(Speise speise){
+	}*/
+	/*public void update(Speise speise){
 		int nr = speise.getNr();
 		
 		try{
@@ -62,7 +62,7 @@ public class SpeiseDAOsqlite extends daoUtil{
 		e.printStackTrace();
 		}
 
-	}
+	}*/
 	public Speise first(){
 		Speise s = new Speise();
 		int nr = s.getNr();
@@ -173,7 +173,7 @@ public class SpeiseDAOsqlite extends daoUtil{
 		e.printStackTrace();
 		}
 		return s;
-	}*/
+	}
 	public void closeConnection(){
 		try{
 			conn.close();
@@ -181,6 +181,7 @@ public class SpeiseDAOsqlite extends daoUtil{
 			e.printStackTrace();
 		}
 	}
+	*/
 	public int defaultId(){
 		int id = 0;
 		try{

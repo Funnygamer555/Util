@@ -2,7 +2,7 @@ package pizzaService.Util;
 
 import java.util.*;
 
-public class Speise {
+public class Speise implements classUtil{
 	
 	private int nr;
 	private String bezeichnung;
@@ -50,23 +50,26 @@ public class Speise {
 	public void setArt(int art) {
 		this.art = art;
 	}
-	public List<String> toList(){
-		List<String> list = new ArrayList<String>();
+	@Override
+	public List<Object> toList(){
+		List<Object> list = new ArrayList<Object>();
 
-		list.add(0, this.nr+"");
+		list.add(0, this.nr);
 		list.add(1,this.bezeichnung);
 		list.add(2, this.beschreibung);
-		list.add(3,this.art+"");
-		list.add(4,this.preis+"");
+		list.add(3,this.art);
+		list.add(4,this.preis);
 
 		return list;
 	}
-	public void toClass(List<String> list) {
-		this.nr= Integer.parseInt(list.get(0));
-		this.bezeichnung=list.get(1);
-		this.beschreibung=list.get(2);
-		this.art=Integer.parseInt(list.get(3));
-		this.preis=Double.parseDouble(list.get(4));
+
+	@Override
+	public void toClass(List<Object> list) {
+		this.nr= (Integer)list.get(0);
+		this.bezeichnung=(String) list.get(1);
+		this.beschreibung=(String)list.get(2);
+		this.art=(Integer) list.get(3);
+		this.preis=(Double)list.get(4);
 
 	}
 
