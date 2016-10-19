@@ -1,4 +1,4 @@
-package pizzaService;
+package pizzaService.Util;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -82,6 +82,7 @@ public abstract class daoUtil {
         }
         return list;
     }
+    public
     public List<List<String>> getTableData(String table) {
         String sql = "SELECT * FROM " + table;
         List<List<String>> data = new ArrayList<List<String>>();
@@ -111,6 +112,7 @@ public abstract class daoUtil {
         }
         return data;
     }
+
     public void closeConnection(){
         try{
             conn.close();

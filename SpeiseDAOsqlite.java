@@ -1,4 +1,4 @@
-package pizzaService;
+package pizzaService.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
