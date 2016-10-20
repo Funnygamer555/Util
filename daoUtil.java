@@ -3,8 +3,6 @@ package pizzaService.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.DoubleAccumulator;
 import java.sql.Types;
 
 /**
@@ -155,9 +153,9 @@ public abstract class daoUtil {
         }
 
     }
-    public List<List<Object>> getTableData(String table) {
+    public  <T extends classUtil> List<T> getTableData(String table, T t) {
         String sql = "SELECT * FROM " + table;
-        List<List<Object>> data = new ArrayList<List<Object>>();
+        List<T> data = new ArrayList<T>();
         try {
             ps = conn.prepareStatement(sql);
             resultset = ps.executeQuery(sql);
@@ -180,7 +178,8 @@ public abstract class daoUtil {
                         System.out.println("Add new type corresponding to the sql type");
                     }
                 }
-                data.add(list);
+                t.toClass(list);
+                data.add(t);
             }
         } catch (Exception e) {
             e.printStackTrace();
